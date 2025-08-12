@@ -20,37 +20,37 @@
 
     #sismosList li {
       cursor: pointer;
-      margin: 12px 0;
-      border: none; /* sin bordes */
+      margin: 14px 0;
+      border: none;
     }
- #sismosList li .event-wrapper {
-  display: flex;
-  flex-direction: row;
-  align-items: center; /* cambiar de stretch a center para usar solo la altura necesaria */
-  gap: 12px;
-  padding: 12px 10px;
-  border-radius: 6px;
-  background-color: #1a1a1a;
-  border-bottom: none;
-}
-
+    #sismosList li .event-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 12px;
+      border-radius: 6px;
+      background-color: #131313;
+      border-bottom: none;
+      border-left: 3px solid #444;
+    }
 
     .mag-container {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-width: 48px;
-      max-width: 48px;
+      min-width: 60px;
+      max-width: 60px;
       font-weight: 700;
-      font-size: 18px;
+      font-size: 20px;
       border-radius: 6px;
-      padding: 4px 6px;
+      padding: 6px 8px;
       box-sizing: border-box;
-      background-color: #292929; /* un poco más claro que el fondo de la lista */
+      background-color: #292929;
       color: #e0e0e0;
       flex-shrink: 0;
-      border: none; /* sin bordes */
+      border: none;
       box-shadow: none;
     }
     .mag-value {
@@ -58,7 +58,7 @@
       font-weight: 700;
     }
     .mag-type {
-      font-size: 10px;
+      font-size: 12px;
       font-weight: 400;
       color: #bbb;
       margin-top: 2px;
@@ -70,21 +70,21 @@
       flex-direction: column;
       flex-grow: 1;
       min-width: 0;
-      gap: 4px;
+      gap: 6px;
     }
     .place {
       font-weight: 600;
-      margin-bottom: 5px;
-      font-size: 16px;
+      margin-bottom: 6px;
+      font-size: 18px;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       line-height: 1.2;
     }
     .subtitle {
-      font-size: 14px;
+      font-size: 16px;
       color: rgb(187, 187, 187);
-      font-style: normal; /* quitar italic */
+      font-style: normal;
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -94,8 +94,8 @@
     .details {
       display: flex;
       flex-direction: column;
-      gap: 2px;
-      font-size: 14px;
+      gap: 4px;
+      font-size: 16px;
       color: #bbb;
       margin: 0;
     }
@@ -111,7 +111,7 @@
     }
 
     :root {
-      --md-sys-color-primary: #1b1b1b;
+      --md-sys-color-primary: #161616;
       --md-sys-color-on-primary: white;
       background: #121212;
       color: #e0e0e0;
@@ -145,18 +145,18 @@
       overflow: hidden;
     }
     #sismosList {
-      width: 400px;
+      width: 500px;
       height: 100%;
       display: flex;
       flex-direction: column;
-      background: #151515;
+      background: #0e0e0e;
       padding: 10px;
       box-sizing: border-box;
       flex-shrink: 0;
     }
     #sismosList h2 {
       margin: 0 0 12px 0;
-      font-size: 18px;
+      font-size: 20px;
       padding-bottom: 6px;
       flex-shrink: 0;
       font-family: 'Poppins', sans-serif;
@@ -178,14 +178,6 @@
       height: 100%;
       min-width: 0;
     }
-    .marker {
-      border-radius: 50%;
-      width: 25px;
-      height: 25px;
-      border: 2px solid;
-      box-shadow: 0 0 8px;
-    }
-
     @media (max-width: 600px) {
       .container {
         flex-direction: column-reverse;
@@ -220,6 +212,8 @@
 
 <div class="container">
   <div id="sismosList">
+    
+
     <ul id="sismos"></ul>
   </div>
   <div id="map"></div>
@@ -235,13 +229,13 @@
     dragRotate: false
   });
 
- function colorPorMagnitud(mag) {
-  if (mag >= 7) return {bg: '#292929', border: 'none', text: '#a63fff'};      // más fuerte púrpura
-  if (mag >= 6) return {bg: '#292929', border: 'none', text: '#ff4040'};      // rojo sólido
-  if (mag >= 5) return {bg: '#292929', border: 'none', text: '#ffb84d'};      // naranja fuerte
-  if (mag >= 4) return {bg: '#292929', border: 'none', text: '#4a90ff'};      // azul fuerte
-  return {bg: '#292929', border: 'none', text: '#bbb'};                       // gris sólido
-}
+  function colorPorMagnitud(mag) {
+    if (mag >= 7) return {bg: '#292929', border: 'none', text: '#a63fff'};
+    if (mag >= 6) return {bg: '#292929', border: 'none', text: '#ff4040'};
+    if (mag >= 5) return {bg: '#292929', border: 'none', text: '#ffb84d'};
+    if (mag >= 4) return {bg: '#292929', border: 'none', text: '#4a90ff'};
+    return {bg: '#292929', border: 'none', text: '#bbb'};
+  }
 
   function tiempoRelativo(fecha) {
     const ahora = new Date();
@@ -272,37 +266,41 @@
       const magFixed = mag.toFixed(1);
       const place = sismo.properties.place;
       const time = new Date(sismo.properties.time);
-      const depth = sismo.geometry.coordinates[2] || 0;
-
+      const depth = coords[2] || 0;
       const magType = (sismo.properties.magType || sismo.properties.type || 'MD').toUpperCase();
-
       const tiempoReporte = tiempoRelativo(time);
       const fechaHora = time.toLocaleString();
-
       const colors = colorPorMagnitud(mag);
 
       const li = document.createElement('li');
-
       const wrapper = document.createElement('div');
       wrapper.className = 'event-wrapper';
+const magDiv = document.createElement('div');
+magDiv.className = 'mag-container';
+magDiv.style.backgroundColor = colors.bg;
 
-      const magDiv = document.createElement('div');
-      magDiv.className = 'mag-container';
-      magDiv.style.backgroundColor = colors.bg;
-      magDiv.style.border = 'none';
+const sourceLabel = document.createElement('div');
+sourceLabel.textContent = 'USGS';
+sourceLabel.style.fontSize = '12px';
+sourceLabel.style.fontWeight = '600';
+sourceLabel.style.color = '#888';
+sourceLabel.style.marginBottom = '4px';
 
-      const magValue = document.createElement('div');
-      magValue.className = 'mag-value';
-      magValue.textContent = magFixed;
-      magValue.style.color = colors.text;
+const magValue = document.createElement('div');
+magValue.className = 'mag-value';
+magValue.textContent = magFixed;
+magValue.style.color = colors.text;
 
-      const magTypeDiv = document.createElement('div');
-      magTypeDiv.className = 'mag-type';
-      magTypeDiv.textContent = magType;
-      magTypeDiv.style.color = '#bbb';
+const magTypeDiv = document.createElement('div');
+magTypeDiv.className = 'mag-type';
+magTypeDiv.textContent = magType;
 
-      magDiv.appendChild(magValue);
-      magDiv.appendChild(magTypeDiv);
+magTypeDiv.style.color = '#bbb';
+
+magDiv.appendChild(sourceLabel);
+magDiv.appendChild(magValue);
+magDiv.appendChild(magTypeDiv);
+
 
       const infoDiv = document.createElement('div');
       infoDiv.className = 'info-container';
@@ -339,20 +337,8 @@
       list.appendChild(li);
 
       li.onclick = () => {
-        map.flyTo({ center: [coords[0], coords[1]], zoom: 7 });
+        map.flyTo({ center: [coords[0], coords[1]], zoom: 4 });
       };
-
-      // Marker
-      const el = document.createElement('div');
-      el.className = 'marker';
-      el.style.backgroundColor = colors.bg;
-      el.style.borderColor = 'transparent';
-      el.style.boxShadow = `0 0 8px ${colors.text}`;
-      el.style.zIndex = mag >= 5 ? '1000' : '1';
-
-      new mapboxgl.Marker(el)
-        .setLngLat([coords[0], coords[1]])
-        .addTo(map);
     });
   }
 
