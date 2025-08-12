@@ -12,7 +12,7 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="AlzoMX 5" />
-  <meta name="theme-color" content="#242424" />
+  <meta name="theme-color" content="#1b1b1b" />
   <style>
     * {
       font-family: 'Poppins', sans-serif;
@@ -23,20 +23,17 @@
       margin: 12px 0;
       border: none; /* sin bordes */
     }
-    #sismosList li .event-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: stretch;
-      gap: 12px;
-      padding: 12px 10px;
-      border-radius: 6px;
-      background-color: #1a1a1a;
-      border-bottom: none; /* sin borde */
-      transition: background-color 0.3s;
-    }
-    #sismosList li .event-wrapper:hover {
-      background-color: #3a3a3a;
-    }
+ #sismosList li .event-wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center; /* cambiar de stretch a center para usar solo la altura necesaria */
+  gap: 12px;
+  padding: 12px 10px;
+  border-radius: 6px;
+  background-color: #1a1a1a;
+  border-bottom: none;
+}
+
 
     .mag-container {
       display: flex;
@@ -46,7 +43,7 @@
       min-width: 48px;
       max-width: 48px;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 18px;
       border-radius: 6px;
       padding: 4px 6px;
       box-sizing: border-box;
@@ -76,7 +73,8 @@
       gap: 4px;
     }
     .place {
-      font-weight: 700;
+      font-weight: 600;
+      margin-bottom: 5px;
       font-size: 16px;
       white-space: nowrap;
       overflow: hidden;
@@ -85,9 +83,8 @@
     }
     .subtitle {
       font-size: 14px;
-      color: #999;
+      color: rgb(187, 187, 187);
       font-style: normal; /* quitar italic */
-      font-weight: 700; /* poner bold */
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
@@ -110,11 +107,11 @@
       content: attr(data-label);
       font-weight: 700;
       margin-right: 4px;
-      color: #ccc;
+      color: #7b7b7b;
     }
 
     :root {
-      --md-sys-color-primary: #242424;
+      --md-sys-color-primary: #1b1b1b;
       --md-sys-color-on-primary: white;
       background: #121212;
       color: #e0e0e0;
@@ -254,9 +251,9 @@
     const diffHrs = Math.floor(diffMin / 60);
     const diffDias = Math.floor(diffHrs / 24);
 
-    if (diffSeg < 60) return `Hace ${diffSeg} seg${diffSeg === 1 ? '' : 's'}`;
-    if (diffMin < 60) return `Hace ${diffMin} min${diffMin === 1 ? '' : 's'}`;
-    if (diffHrs < 24) return `Hace ${diffHrs} hr${diffHrs === 1 ? '' : 's'}`;
+    if (diffSeg < 60) return `Hace ${diffSeg} Segundo${diffSeg === 1 ? '' : 's'}`;
+    if (diffMin < 60) return `Hace ${diffMin} Minuto${diffMin === 1 ? '' : 's'}`;
+    if (diffHrs < 24) return `Hace ${diffHrs} Hora${diffHrs === 1 ? '' : 's'}`;
     return `Hace ${diffDias} día${diffDias === 1 ? '' : 's'}`;
   }
 
