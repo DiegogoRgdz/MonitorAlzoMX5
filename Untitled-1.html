@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Toolbar MD Responsive con Menu y Lista Sismos</title>
+
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+  <style>
+    :root {
+      --md-sys-color-primary: #242424;
+      --md-sys-color-on-primary: white;
+      background: #121212;
+      color: #e0e0e0;
+    }
+    html, body {
+      height: 100%;
+      margin: 0;
+      font-family: Roboto, system-ui;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      overflow: hidden;
+    }
+    .toolbar {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 64px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+    .toolbar .material-icons {
+      cursor: pointer;
+      margin-right: 16px;
+    }
+    .container {
+      display: flex;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+    }
+    #sismosList {
+      width: 320px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      background: #1e1e1e;
+      border-right: 1px solid #444;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+    #sismosList h2 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      border-bottom: 1px solid #555;
+      padding-bottom: 6px;
+      flex-shrink: 0;
+    }
+    #sismosList ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+      overflow-y: auto;
+      flex-grow: 1;
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none;  /* IE 10+ */
+    }
+    #sismosList ul::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, Opera */
+    }
+    #sismosList li {
+      margin-bottom: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+      transition: background 0.2s ease;
+    }
+    #sismosList li:hover {
+      background: #333;
+    }
+    #map {
+      flex-grow: 1;
+      height: 100%;
+      min-width: 0;
+    }
+    .marker {
+      border-radius: 50%;
+      width: 25px;
+      height: 25px;
+      border: 2px solid;
+      box-shadow: 0 0 8px;
+    }
+
+   @media (max-width: 600px) {
+  .container {
+    flex-direction: column-reverse;
+    height: 100vh; /* ocupar toda la pantalla debajo del toolbar */
+  }
+  #sismosList {
+    width: 100%;
+    height: 50vh; /* mitad pantalla */
+    border-right: none;
+    border-top: 1px solid #444;
+    padding: 10px;
+  }
+  #sismosList h2 {
+    margin-bottom: 8px;
+  }
+  #sismosList ul {
+    height: calc(50vh - 38px);
+  }
+  #map {
+    height: 50vh; /* mitad pantalla */
+    width: 100%;
+  }
+}
+
+    }
+  </style>
+</head>
+<body>
+
+  <header class="toolbar">
+    <span id="menuBtn" class="material-icons">menu</span>
+    <span style="font-weight: 600; font-size: 20px;">AlzoMX 5</span>
+  </header>
+
+  <div class="container">
+    <div id="sismosList">
+      <h2>Últimos Sismos USGS (Semana, ≥ 4.0)</h2>
+      <ul id="sismos"></ul>
+    </div>
+    <div id="map"></div>
+  </div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
+    const map = new mapboxgl.Map({
+      container: 'map',
+      style: 'mapbox://styles/mapbox/dark-v9',
+      center: [-99.133055555556, 19.432777777778],
+      zoom: 6
+    });
+
+    function colorPorMagnitud(mag) {
+      if (mag >= 7) return {bg: '#6a0dad', border: '#4b0082', shadow: 'rgba(106, 13, 173, 0.8)'}; // morado
+      if (mag >= 6) return {bg: '#b70000', border: '#820000', shadow: 'rgba(183, 0, 0, 0.8)'}; // rojo
+      if (mag >= 5) return {bg: '#e08e00', border: '#a06000', shadow: 'rgba(224, 140, 0, 0.8)'}; // naranja
+      if (mag >= 4) return {bg: '#0077e0', border: '#004a8f', shadow: 'rgba(0, 119, 224, 0.8)'}; // azul
+      return {bg: '#666666', border: '#444444', shadow: 'rgba(100, 100, 100, 0.8)'}; // gris (no usado)
+    }
+
+    async function cargarSismos() {
+      const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
+      const res = await fetch(url);
+      const data = await res.json();
+      const sismos = data.features.filter(s => s.properties.mag >= 4);
+
+      const list = document.getElementById('sismos');
+      list.innerHTML = '';
+
+      sismos.forEach(sismo => {
+        const coords = sismo.geometry.coordinates;
+        const mag = sismo.properties.mag;
+        const magFixed = mag.toFixed(1);
+        const place = sismo.properties.place;
+        const time = new Date(sismo.properties.time).toLocaleString();
+
+        const li = document.createElement('li');
+        li.textContent = `M${magFixed} - ${place} (${time})`;
+        li.onclick = () => {
+          map.flyTo({ center: [coords[0], coords[1]], zoom: 7 });
+        };
+        list.appendChild(li);
+
+        const colors = colorPorMagnitud(mag);
+
+        const el = document.createElement('div');
+        el.className = 'marker';
+        el.style.backgroundColor = colors.bg;
+        el.style.borderColor = colors.border;
+        el.style.boxShadow = `0 0 8px ${colors.shadow}`;
+
+        new mapboxgl.Marker(el)
+          .setLngLat([coords[0], coords[1]])
+          .addTo(map);
+      });
+    }
+
+    cargarSismos();
+  </script>
+
+</body>
+</html>
