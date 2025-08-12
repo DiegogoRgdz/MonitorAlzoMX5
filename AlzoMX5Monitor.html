@@ -8,12 +8,111 @@
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
-<meta name="apple-mobile-web-app-capable" content="yes" />
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<meta name="apple-mobile-web-app-title" content="AlzoMX 5" />
-<meta name="theme-color" content="#242424" />
-
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="AlzoMX 5" />
+  <meta name="theme-color" content="#242424" />
   <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    #sismosList li {
+      cursor: pointer;
+      margin: 12px 0;
+      border: none; /* sin bordes */
+    }
+    #sismosList li .event-wrapper {
+      display: flex;
+      flex-direction: row;
+      align-items: stretch;
+      gap: 12px;
+      padding: 12px 10px;
+      border-radius: 6px;
+      background-color: #1a1a1a;
+      border-bottom: none; /* sin borde */
+      transition: background-color 0.3s;
+    }
+    #sismosList li .event-wrapper:hover {
+      background-color: #3a3a3a;
+    }
+
+    .mag-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-width: 48px;
+      max-width: 48px;
+      font-weight: 700;
+      font-size: 16px;
+      border-radius: 6px;
+      padding: 4px 6px;
+      box-sizing: border-box;
+      background-color: #292929; /* un poco más claro que el fondo de la lista */
+      color: #e0e0e0;
+      flex-shrink: 0;
+      border: none; /* sin bordes */
+      box-shadow: none;
+    }
+    .mag-value {
+      line-height: 1;
+      font-weight: 700;
+    }
+    .mag-type {
+      font-size: 10px;
+      font-weight: 400;
+      color: #bbb;
+      margin-top: 2px;
+      text-transform: uppercase;
+      line-height: 1;
+    }
+    .info-container {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      min-width: 0;
+      gap: 4px;
+    }
+    .place {
+      font-weight: 700;
+      font-size: 16px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+    }
+    .subtitle {
+      font-size: 14px;
+      color: #999;
+      font-style: normal; /* quitar italic */
+      font-weight: 700; /* poner bold */
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      line-height: 1.2;
+      margin: 0;
+    }
+    .details {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      font-size: 14px;
+      color: #bbb;
+      margin: 0;
+    }
+    .details div {
+      white-space: nowrap;
+      line-height: 1.2;
+    }
+    .details div::before {
+      content: attr(data-label);
+      font-weight: 700;
+      margin-right: 4px;
+      color: #ccc;
+    }
+
     :root {
       --md-sys-color-primary: #242424;
       --md-sys-color-on-primary: white;
@@ -23,7 +122,6 @@
     html, body {
       height: 100%;
       margin: 0;
-      font-family: Roboto, system-ui;
       background: var(--md-sys-color-primary);
       color: var(--md-sys-color-on-primary);
       overflow: hidden;
@@ -38,6 +136,7 @@
       position: relative;
       z-index: 10;
       flex-shrink: 0;
+      font-family: 'Poppins', sans-serif;
     }
     .toolbar .material-icons {
       cursor: pointer;
@@ -49,12 +148,11 @@
       overflow: hidden;
     }
     #sismosList {
-      width: 320px;
+      width: 400px;
       height: 100%;
       display: flex;
       flex-direction: column;
-      background: #1e1e1e;
-      border-right: 1px solid #444;
+      background: #151515;
       padding: 10px;
       box-sizing: border-box;
       flex-shrink: 0;
@@ -62,9 +160,9 @@
     #sismosList h2 {
       margin: 0 0 12px 0;
       font-size: 18px;
-      border-bottom: 1px solid #555;
       padding-bottom: 6px;
       flex-shrink: 0;
+      font-family: 'Poppins', sans-serif;
     }
     #sismosList ul {
       list-style: none;
@@ -72,22 +170,11 @@
       margin: 0;
       overflow-y: auto;
       flex-grow: 1;
-      scrollbar-width: none; /* Firefox */
-      -ms-overflow-style: none;  /* IE 10+ */
+      scrollbar-width: none;
+      -ms-overflow-style: none;
     }
     #sismosList ul::-webkit-scrollbar {
-      display: none; /* Chrome, Safari, Opera */
-    }
-    #sismosList li {
-      margin-bottom: 10px;
-      font-size: 14px;
-      cursor: pointer;
-      border-bottom: 1px solid #333;
-      padding-bottom: 8px;
-      transition: background 0.2s ease;
-    }
-    #sismosList li:hover {
-      background: #333;
+      display: none;
     }
     #map {
       flex-grow: 1;
@@ -102,110 +189,178 @@
       box-shadow: 0 0 8px;
     }
 
-   @media (max-width: 600px) {
-  .container {
-    flex-direction: column-reverse;
-    height: 100vh; /* ocupar toda la pantalla debajo del toolbar */
-  }
-  #sismosList {
-    width: 100%;
-    height: 50vh; /* mitad pantalla */
-    border-right: none;
-    border-top: 1px solid #444;
-    padding: 10px;
-  }
-  #sismosList h2 {
-    margin-bottom: 8px;
-  }
-  #sismosList ul {
-    height: calc(50vh - 38px);
-  }
-  #map {
-    height: 50vh; /* mitad pantalla */
-    width: 100%;
-  }
-}
-
-    
+    @media (max-width: 600px) {
+      .container {
+        flex-direction: column-reverse;
+        height: 100vh;
+      }
+      #sismosList {
+        width: 100%;
+        height: 50vh;
+        border-right: none;
+        border-top: 1px solid #444;
+        padding: 10px;
+      }
+      #sismosList h2 {
+        margin-bottom: 8px;
+      }
+      #sismosList ul {
+        height: calc(50vh - 38px);
+      }
+      #map {
+        height: 50vh;
+        width: 100%;
+      }
+    }
   </style>
 </head>
 <body>
 
-  <header class="toolbar">
-    <span id="menuBtn" class="material-icons">menu</span>
-    <span style="font-weight: 600; font-size: 20px;">AlzoMX 5</span>
-  </header>
+<header class="toolbar">
+  <span id="menuBtn" class="material-icons">menu</span>
+  <span style="font-weight: 600; font-size: 20px;">Monitor AlzoMX 5</span>
+</header>
 
-  <div class="container">
-    <div id="sismosList">
-      <h2>Últimos Sismos USGS (Semana, ≥ 4.0)</h2>
-      <ul id="sismos"></ul>
-    </div>
-    <div id="map"></div>
+<div class="container">
+  <div id="sismosList">
+    <ul id="sismos"></ul>
   </div>
+  <div id="map"></div>
+</div>
 
-  <script>
-    mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
-    const map = new mapboxgl.Map({
-      container: 'map',
-      style: 'mapbox://styles/mapbox/dark-v9',
-      center: [-99.133055555556, 19.432777777778],
-      zoom: 6,
-       dragRotate: false    });
+<script>
+  mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
+  const map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/mapbox/dark-v9',
+    center: [-99.133055555556, 19.432777777778],
+    zoom: 6,
+    dragRotate: false
+  });
 
-    function colorPorMagnitud(mag) {
-      if (mag >= 7) return {bg: '#6a0dad', border: '#4b0082', shadow: 'rgba(144, 0, 196, 0.8)'}; // morado
-      if (mag >= 6) return {bg: '#b70000', border: '#820000', shadow: 'rgba(196, 0, 0, 0.8)'}; // rojo
-      if (mag >= 5) return {bg: '#e08e00', border: '#a06000', shadow: 'rgba(222, 122, 0, 0.8)'}; // naranja
-      if (mag >= 4) return {bg: '#0077e0', border: '#004a8f', shadow: 'rgba(47, 161, 194, 0.8)'}; // azul
-      return {bg: '#666666', border: '#444444', shadow: 'rgba(100, 100, 100, 0.8)'}; // gris (no usado)
-    }
-
-    async function cargarSismos() {
-      const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
-      const res = await fetch(url);
-      const data = await res.json();
-      const sismos = data.features.filter(s => s.properties.mag >= 4);
-
-      const list = document.getElementById('sismos');
-      list.innerHTML = '';
-
-      sismos.forEach(sismo => {
-        const coords = sismo.geometry.coordinates;
-        const mag = sismo.properties.mag;
-        const magFixed = mag.toFixed(1);
-        const place = sismo.properties.place;
-        const time = new Date(sismo.properties.time).toLocaleString();
-
-        const li = document.createElement('li');
-        li.textContent = `M${magFixed} - ${place} (${time})`;
-        li.onclick = () => {
-          map.flyTo({ center: [coords[0], coords[1]], zoom: 7 });
-        };
-        list.appendChild(li);
-
-        const colors = colorPorMagnitud(mag);
-
-        const el = document.createElement('div');
-        el.className = 'marker';
-        el.style.backgroundColor = colors.bg;
-        el.style.borderColor = colors.border;
-        el.style.boxShadow = `0 0 8px ${colors.shadow}`;
-
-        new mapboxgl.Marker(el)
-          .setLngLat([coords[0], coords[1]])
-          .addTo(map);
-
-          if (mag >= 5) {
-  el.style.zIndex = '1000';
-} else {
-  el.style.zIndex = '1';
+ function colorPorMagnitud(mag) {
+  if (mag >= 7) return {bg: '#292929', border: 'none', text: '#a63fff'};      // más fuerte púrpura
+  if (mag >= 6) return {bg: '#292929', border: 'none', text: '#ff4040'};      // rojo sólido
+  if (mag >= 5) return {bg: '#292929', border: 'none', text: '#ffb84d'};      // naranja fuerte
+  if (mag >= 4) return {bg: '#292929', border: 'none', text: '#4a90ff'};      // azul fuerte
+  return {bg: '#292929', border: 'none', text: '#bbb'};                       // gris sólido
 }
-      });
-    }
 
-    cargarSismos();
-  </script>
+  function tiempoRelativo(fecha) {
+    const ahora = new Date();
+    const diffMs = ahora - fecha;
+    const diffSeg = Math.floor(diffMs / 1000);
+    const diffMin = Math.floor(diffSeg / 60);
+    const diffHrs = Math.floor(diffMin / 60);
+    const diffDias = Math.floor(diffHrs / 24);
+
+    if (diffSeg < 60) return `Hace ${diffSeg} seg${diffSeg === 1 ? '' : 's'}`;
+    if (diffMin < 60) return `Hace ${diffMin} min${diffMin === 1 ? '' : 's'}`;
+    if (diffHrs < 24) return `Hace ${diffHrs} hr${diffHrs === 1 ? '' : 's'}`;
+    return `Hace ${diffDias} día${diffDias === 1 ? '' : 's'}`;
+  }
+
+  async function cargarSismos() {
+    const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
+    const res = await fetch(url);
+    const data = await res.json();
+    const sismos = data.features.filter(s => s.properties.mag >= 4);
+
+    const list = document.getElementById('sismos');
+    list.innerHTML = '';
+
+    sismos.forEach(sismo => {
+      const coords = sismo.geometry.coordinates;
+      const mag = sismo.properties.mag;
+      const magFixed = mag.toFixed(1);
+      const place = sismo.properties.place;
+      const time = new Date(sismo.properties.time);
+      const depth = sismo.geometry.coordinates[2] || 0;
+
+      const magType = (sismo.properties.magType || sismo.properties.type || 'MD').toUpperCase();
+
+      const tiempoReporte = tiempoRelativo(time);
+      const fechaHora = time.toLocaleString();
+
+      const colors = colorPorMagnitud(mag);
+
+      const li = document.createElement('li');
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'event-wrapper';
+
+      const magDiv = document.createElement('div');
+      magDiv.className = 'mag-container';
+      magDiv.style.backgroundColor = colors.bg;
+      magDiv.style.border = 'none';
+
+      const magValue = document.createElement('div');
+      magValue.className = 'mag-value';
+      magValue.textContent = magFixed;
+      magValue.style.color = colors.text;
+
+      const magTypeDiv = document.createElement('div');
+      magTypeDiv.className = 'mag-type';
+      magTypeDiv.textContent = magType;
+      magTypeDiv.style.color = '#bbb';
+
+      magDiv.appendChild(magValue);
+      magDiv.appendChild(magTypeDiv);
+
+      const infoDiv = document.createElement('div');
+      infoDiv.className = 'info-container';
+
+      const placeEl = document.createElement('div');
+      placeEl.className = 'place';
+      placeEl.textContent = place;
+
+      const subtitleContainer = document.createElement('div');
+      subtitleContainer.className = 'subtitle';
+      subtitleContainer.textContent = tiempoReporte;
+
+      const detailsContainer = document.createElement('div');
+      detailsContainer.className = 'details';
+
+      const profundidadEl = document.createElement('div');
+      profundidadEl.setAttribute('data-label', 'Profundidad:');
+      profundidadEl.textContent = `${depth.toFixed(1)} km`;
+
+      const fechaHoraEl = document.createElement('div');
+      fechaHoraEl.setAttribute('data-label', 'Fecha y hora:');
+      fechaHoraEl.textContent = fechaHora;
+
+      detailsContainer.appendChild(profundidadEl);
+      detailsContainer.appendChild(fechaHoraEl);
+
+      infoDiv.appendChild(placeEl);
+      infoDiv.appendChild(subtitleContainer);
+      infoDiv.appendChild(detailsContainer);
+
+      wrapper.appendChild(magDiv);
+      wrapper.appendChild(infoDiv);
+      li.appendChild(wrapper);
+      list.appendChild(li);
+
+      li.onclick = () => {
+        map.flyTo({ center: [coords[0], coords[1]], zoom: 7 });
+      };
+
+      // Marker
+      const el = document.createElement('div');
+      el.className = 'marker';
+      el.style.backgroundColor = colors.bg;
+      el.style.borderColor = 'transparent';
+      el.style.boxShadow = `0 0 8px ${colors.text}`;
+      el.style.zIndex = mag >= 5 ? '1000' : '1';
+
+      new mapboxgl.Marker(el)
+        .setLngLat([coords[0], coords[1]])
+        .addTo(map);
+    });
+  }
+
+  cargarSismos();
+</script>
 
 </body>
 </html>
