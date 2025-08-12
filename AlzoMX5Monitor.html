@@ -154,10 +154,10 @@
        dragRotate: false    });
 
     function colorPorMagnitud(mag) {
-      if (mag >= 7) return {bg: '#6a0dad', border: '#4b0082', shadow: 'rgba(106, 13, 173, 0.8)'}; // morado
-      if (mag >= 6) return {bg: '#b70000', border: '#820000', shadow: 'rgba(183, 0, 0, 0.8)'}; // rojo
-      if (mag >= 5) return {bg: '#e08e00', border: '#a06000', shadow: 'rgba(224, 140, 0, 0.8)'}; // naranja
-      if (mag >= 4) return {bg: '#0077e0', border: '#004a8f', shadow: 'rgba(0, 119, 224, 0.8)'}; // azul
+      if (mag >= 7) return {bg: '#6a0dad', border: '#4b0082', shadow: 'rgba(144, 0, 196, 0.8)'}; // morado
+      if (mag >= 6) return {bg: '#b70000', border: '#820000', shadow: 'rgba(196, 0, 0, 0.8)'}; // rojo
+      if (mag >= 5) return {bg: '#e08e00', border: '#a06000', shadow: 'rgba(222, 122, 0, 0.8)'}; // naranja
+      if (mag >= 4) return {bg: '#0077e0', border: '#004a8f', shadow: 'rgba(47, 161, 194, 0.8)'}; // azul
       return {bg: '#666666', border: '#444444', shadow: 'rgba(100, 100, 100, 0.8)'}; // gris (no usado)
     }
 
@@ -195,6 +195,12 @@
         new mapboxgl.Marker(el)
           .setLngLat([coords[0], coords[1]])
           .addTo(map);
+
+          if (mag >= 5) {
+  el.style.zIndex = '1000';
+} else {
+  el.style.zIndex = '1';
+}
       });
     }
 
