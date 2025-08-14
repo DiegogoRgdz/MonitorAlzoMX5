@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+  <title>AlzoMX 5 | Inicio</title>
+  <meta charset="utf-8" />
+  <meta name="theme-color" content="#151515" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="AlzoMX5Monitor/CSS/AlzoMX5Button.css">
+
+  <style>
+    * {
+      font-family: 'Poppins', sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+      background: #151515;
+      color: #ffffff;
+      overflow: hidden;
+    }
+
+    .AlzoMX5ToolbarMenu {
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      height: 64px;
+      background: #121212;
+      position: relative;
+      z-index: 10;
+      flex-shrink: 0;
+    }
+
+    .AlzoMX5ToolbarMenu .material-icons {
+      cursor: pointer;
+      margin-right: 16px;
+    }
+
+    .AlzoMX5MainContainer {
+      display: flex;
+      height: calc(100vh - 64px);
+      overflow: hidden;
+    }
+
+    .AlzoMX5UserPanel {
+      background: #151515;
+      padding: 10px;
+      border-radius: 15px;
+      margin-top: 5px;
+    }
+
+    .AlzoMX5OptionsPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 15px;
+    }
+
+    .AlzoMX5CreditsPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 15px;
+    }
+
+    .AlzoMX5SOSPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 15px;
+    }
+
+    #AlzoMX5MainContainerMenu {
+      width: 500px;
+      height: 100%;
+      background: #0e0e0e;
+      padding: 10px;
+      box-sizing: border-box;
+      flex-shrink: 0;
+    }
+
+    #AlzoMX5MapboxMap {
+      flex-grow: 1;
+      height: 100%;
+      min-width: 0;
+    }
+
+    @media (max-width: 800px) {
+      .AlzoMX5MainContainer {
+        flex-direction: column-reverse;
+        height: 100vh;
+      }
+
+      #AlzoMX5MainContainerMenu {
+        width: 100%;
+        height: 50vh;
+      }
+
+      #AlzoMX5MapboxMap {
+        height: 50vh;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="AlzoMX5ToolbarMenu">
+    <span class="material-icons">menu</span>
+    <span style="font-weight: 600; font-size: 20px;">Monitor AlzoMX 5</span>
+  </header>
+
+  <div class="AlzoMX5MainContainer">
+    <div id="AlzoMX5MainContainerMenu">
+      <div class="AlzoMX5UserPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <span class="material-icons"
+            style="font-size: 42px; color: #fefefe; background: #1e1e1e; border-radius: 50%; padding: 8px;">account_circle</span>
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Bienvenido, Diego Rodríguez García</h3>
+            <p style="margin: 0; color: #8b8b8b;">Estás usando una versión beta</p>
+          </div>
+        </div>
+        <div style="margin-top: 15px; display: flex; flex-direction: row; gap: 10px;">
+          <button class="AlzoMX5Button" style="width: 100%;">
+            <span class="material-icons" style="margin-right: 10px;">wifi</span>Conexión Wi-Fi
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%;">
+            <span style="margin-right: 10px;" class="material-icons">check_circle</span>Conexión con AlzoMX
+          </button>
+        </div>
+      </div>
+
+      <div class="AlzoMX5SOSPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Reportar siniestro</h3>
+          </div>
+        </div>
+        <div style="margin-top: 15px; margin-bottom: 10px; display: flex; flex-direction: row; gap: 10px; padding: 0 10px;">
+          <button class="AlzoMX5Button" style="flex: 1; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">comment</span>¿Sentiste un sismo? Repórtalo
+          </button>
+          <button class="AlzoMX5Button" style="flex: 1; display: flex; align-items: center; gap: 10px; color: rgb(255, 128, 128);">
+            <span class="material-icons" style="color: rgb(255, 128, 128);">emergency</span>Reportar otros riesgos
+          </button>
+        </div>
+      </div>
+
+      <div class="AlzoMX5OptionsPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Funciones disponibles</h3>
+          </div>
+        </div>
+        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px; padding: 0 10px;">
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">report</span>Últimos sismos reportados
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">map</span>Concentración de eventos
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">query_stats</span>Analisis estadistico de eventos
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">emoji_people</span>Reportes de la comunidad
+          </button>
+        </div>
+      </div>
+
+      <div class="AlzoMX5CreditsPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Créditos y agradecimientos</h3>
+            <h4 style="margin: 0; font-weight: 400; margin-top: 10px;">USGS: U.S. Geological Survey</h4>
+            <p style="font-size: 15px; margin: 0px; color: #8b8b8b;">
+              Fuente de datos para listas y mapa: <a href="https://earthquake.usgs.gov/" target="_blank" style="color: #8b8b8b;">https://earthquake.usgs.gov/</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="AlzoMX5MapboxMap"></div>
+  </div>
+
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
+    const map = new mapboxgl.Map({
+      container: 'AlzoMX5MapboxMap',
+      style: 'mapbox://styles/mapbox/dark-v9',
+      center: [-99.133055555556, 19.432777777778],
+      zoom: 6,
+      dragRotate: false
+    });
+  </script>
+</body>
+
+</html>
