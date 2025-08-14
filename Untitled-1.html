@@ -67,6 +67,7 @@
       padding: 10px;
       margin-top: 15px;
       border-radius: 15px;
+      margin-bottom: 100px;
     }
 
     .AlzoMX5SOSPanel {
@@ -76,14 +77,23 @@
       border-radius: 15px;
     }
 
-    #AlzoMX5MainContainerMenu {
-      width: 500px;
-      height: 100%;
-      background: #0e0e0e;
-      padding: 10px;
-      box-sizing: border-box;
-      flex-shrink: 0;
-    }
+#AlzoMX5MainContainerMenu {
+  width: 500px;
+  height: 100%;
+  background: #0e0e0e;
+  padding: 10px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+  -webkit-overflow-scrolling: touch; /* iOS */
+}
+
+
+#AlzoMX5MainContainerMenu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
 
     #AlzoMX5MapboxMap {
       flex-grow: 1;
@@ -107,6 +117,27 @@
         width: 100%;
       }
     }
+
+    .AlzoMX5Button {
+  background-color: #1b1b1b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 10px; /* ESPACIO ENTRE TEXTO Y BOTON */
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; /* inline-flex asegura alineación con ícono */
+  align-items: center;  /* centra verticalmente */
+  text-align: left;
+  transition: background-color 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.AlzoMX5Button:hover {
+  background-color: #202020;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
   </style>
 </head>
 
