@@ -100,7 +100,7 @@
   overflow-y: scroll;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
-  -webkit-overflow-scrolling: touch; /* iOS */
+  -webkit-overflow-scrolling: touch; 
 }
 
 
@@ -151,14 +151,6 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
-
-
-
-
-
-
-
-
   </style>
 </head>
 
@@ -253,6 +245,48 @@
       center: [-99.133055555556, 19.432777777778],
       zoom: 1.5,
       dragRotate: false
+    });
+
+
+
+     map.on('load', async () => {
+      map.addSource('plates', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/AlzoMX/AlzoMX/main/plates.json'
+      });
+      map.addLayer({
+        id: 'plates',
+        type: 'line',
+        source: 'plates',
+        paint: { 'line-color': '#FF7300', 'line-width': 1 }
+      });
+
+      const res = await fetch('https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/4.5_week.geojson');
+      const data = await res.json();
+
+      map.addSource('earthquakes', { type: 'geojson', data });
+      map.addLayer({
+        id: 'earthquake-circles',
+        type: 'circle',
+        source: 'earthquakes',
+        paint: {
+          'circle-color': [
+            'interpolate', ['linear'], ['get', 'mag'],
+            4.5, '#00c3ff',
+            5.5, '#ffc400',
+            6.5, '#ff5c33',
+            7.5, '#e60073'
+          ],
+          'circle-radius': [
+            'interpolate', ['linear'], ['get', 'mag'],
+            4.5, 20,
+            5.5, 27,
+            6.5, 37,
+            7.5, 45
+          ],
+          'circle-opacity': 0.5
+        }
+      });
     });
   </script>
 </body>
