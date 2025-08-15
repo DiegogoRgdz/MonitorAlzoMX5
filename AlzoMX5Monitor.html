@@ -1,349 +1,260 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AlzoMX 5</title>
 
-  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
+<head>
+  <title>AlzoMX 5 | Inicio</title>
+  <meta charset="utf-8" />
+  <meta name="theme-color" content="#151515" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="AlzoMX 5" />
-  <meta name="theme-color" content="#1b1b1b" />
+  <link rel="stylesheet" href="AlzoMX5Monitor/CSS/AlzoMX5Button.css">
+
   <style>
     * {
       font-family: 'Poppins', sans-serif;
     }
 
-    #sismosList li {
-      cursor: pointer;
-      margin: 14px 0;
-      border: none;
-    }
-    #sismosList li .event-wrapper {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      gap: 16px;
-      padding: 16px 12px;
-      border-radius: 6px;
-      background-color: #131313;
-      border-bottom: none;
-      border-left: 3px solid #444;
-    }
-
-    .mag-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-width: 60px;
-      max-width: 60px;
-      font-weight: 700;
-      font-size: 20px;
-      border-radius: 6px;
-      padding: 6px 8px;
-      box-sizing: border-box;
-      background-color: #292929;
-      color: #e0e0e0;
-      flex-shrink: 0;
-      border: none;
-      box-shadow: none;
-    }
-    .mag-value {
-      line-height: 1;
-      font-weight: 700;
-    }
-    .mag-type {
-      font-size: 12px;
-      font-weight: 400;
-      color: #bbb;
-      margin-top: 2px;
-      text-transform: uppercase;
-      line-height: 1;
-    }
-    .info-container {
-      display: flex;
-      flex-direction: column;
-      flex-grow: 1;
-      min-width: 0;
-      gap: 6px;
-    }
-    .place {
-      font-weight: 600;
-      margin-bottom: 6px;
-      font-size: 18px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.2;
-    }
-    .subtitle {
-      font-size: 16px;
-      color: rgb(187, 187, 187);
-      font-style: normal;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      line-height: 1.2;
-      margin: 0;
-    }
-    .details {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      font-size: 16px;
-      color: #bbb;
-      margin: 0;
-    }
-    .details div {
-      white-space: nowrap;
-      line-height: 1.2;
-    }
-    .details div::before {
-      content: attr(data-label);
-      font-weight: 700;
-      margin-right: 4px;
-      color: #7b7b7b;
-    }
-
-    :root {
-      --md-sys-color-primary: #161616;
-      --md-sys-color-on-primary: white;
-      background: #121212;
-      color: #e0e0e0;
-    }
-    html, body {
+    html,
+    body {
       height: 100%;
       margin: 0;
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
+      background: #151515;
+      color: #ffffff;
       overflow: hidden;
     }
-    .toolbar {
+
+    .AlzoMX5ToolbarMenu {
       display: flex;
       align-items: center;
       padding: 0 16px;
       height: 64px;
-      background: var(--md-sys-color-primary);
-      color: var(--md-sys-color-on-primary);
+      background: #121212;
       position: relative;
       z-index: 10;
       flex-shrink: 0;
-      font-family: 'Poppins', sans-serif;
     }
-    .toolbar .material-icons {
+
+    .AlzoMX5ToolbarMenu .material-icons {
       cursor: pointer;
       margin-right: 16px;
     }
-    .container {
+
+    .AlzoMX5MainContainer {
       display: flex;
       height: calc(100vh - 64px);
       overflow: hidden;
+    
     }
-    #sismosList {
-      width: 500px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      background: #0e0e0e;
+
+    .AlzoMX5UserPanel {
+      background: #151515;
       padding: 10px;
-      box-sizing: border-box;
-      flex-shrink: 0;
+      border-radius: 15px;
+      margin-top:  10px;
+      padding: 15px;
+      margin-left: 10px;
+      margin-right: 10px;
     }
-    #sismosList h2 {
-      margin: 0 0 12px 0;
-      font-size: 20px;
-      padding-bottom: 6px;
-      flex-shrink: 0;
-      font-family: 'Poppins', sans-serif;
+
+    .AlzoMX5OptionsPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 15px;
+      padding: 15px;
+       margin-left: 10px;
+      margin-right: 10px;
     }
-    #sismosList ul {
-      list-style: none;
-      padding-left: 0;
-      margin: 0;
-      overflow-y: auto;
-      flex-grow: 1;
-      scrollbar-width: none;
-      -ms-overflow-style: none;
+
+    .AlzoMX5CreditsPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 15px;
+      margin-bottom: 90px;
+      padding: 15px;
+         margin-left: 10px;
+      margin-right: 10px;
     }
-    #sismosList ul::-webkit-scrollbar {
-      display: none;
+
+    .AlzoMX5SOSPanel {
+      background: #151515;
+      padding: 10px;
+      margin-top: 20px;
+      border-radius: 15px;
+      padding: 15px;
+   margin-left: 10px;
+      margin-right: 10px;
     }
-    #map {
+
+#AlzoMX5MainContainerMenu {
+  width: 500px;
+  height: 100%;
+  background: #0e0e0e;
+  padding: 10px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+  overflow-y: scroll;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE 10+ */
+  -webkit-overflow-scrolling: touch; /* iOS */
+}
+
+
+#AlzoMX5MainContainerMenu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
+}
+
+    #AlzoMX5MapboxMap {
       flex-grow: 1;
       height: 100%;
       min-width: 0;
     }
-    @media (max-width: 600px) {
-      .container {
+
+    @media (max-width: 800px) {
+      .AlzoMX5MainContainer {
         flex-direction: column-reverse;
         height: 100vh;
       }
-      #sismosList {
+
+      #AlzoMX5MainContainerMenu {
         width: 100%;
         height: 50vh;
-        border-right: none;
-        border-top: 1px solid #444;
-        padding: 10px;
       }
-      #sismosList h2 {
-        margin-bottom: 8px;
-      }
-      #sismosList ul {
-        height: calc(50vh - 38px);
-      }
-      #map {
+
+      #AlzoMX5MapboxMap {
         height: 50vh;
         width: 100%;
       }
     }
+
+    .AlzoMX5Button {
+  background-color: #1b1b1b;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 10px; /* ESPACIO ENTRE TEXTO Y BOTON */
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex; /* inline-flex asegura alineación con ícono */
+  align-items: center;  /* centra verticalmente */
+  text-align: left;
+  transition: background-color 0.5s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.AlzoMX5Button:hover {
+  background-color: #202020;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+
+
+
+
+
+
+
   </style>
 </head>
+
 <body>
+  <header class="AlzoMX5ToolbarMenu">
+    <span class="material-icons">menu</span>
+    <span style="font-weight: 600; font-size: 20px;">Monitor AlzoMX 5</span>
+  </header>
 
-<header class="toolbar">
-  <span id="menuBtn" class="material-icons">menu</span>
-  <span style="font-weight: 600; font-size: 20px;">Monitor AlzoMX 5</span>
-</header>
+  <div class="AlzoMX5MainContainer">
+    <div id="AlzoMX5MainContainerMenu">
+      <div class="AlzoMX5UserPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <span class="material-icons"
+            style="font-size: 42px; color: #fefefe; background: #1e1e1e; border-radius: 50%; padding: 8px;">account_circle</span>
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;   text-overflow: ellipsis">Diego Rodríguez García</h3>
+            <p style="margin: 0; color: #8b8b8b;">Estás usando una versión beta</p>
+          </div>
+        </div>
+        <div style="margin-top: 15px; display: flex; flex-direction: row; gap: 10px;">
+          <button class="AlzoMX5Button" style="width: 100%;">
+            <span class="material-icons" style="margin-right: 10px; color: #6184dd;">wifi</span>Conexión Wi-Fi
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%;">
+            <span style="margin-right: 10px; color: rgb(255, 255, 255);" class="material-icons">check</span>Conexión con AlzoMX
+          </button>
+        </div>
+      </div>
 
-<div class="container">
-  <div id="sismosList">
-    
+      <div class="AlzoMX5SOSPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Crear nuevo reporte de anomalia</h3>
+                        <p style="margin: 0; color: #8b8b8b;">Te reconocemos, usa este recurso reponsablemente</p>
 
-    <ul id="sismos"></ul>
+          </div>
+        </div>
+        <div style="margin-top: 15px; margin-bottom: 10px; display: flex; flex-direction: row; gap: 10px; padding: 0 10px;">
+          <button class="AlzoMX5Button" style="flex: 1; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">comment</span>¿Sentiste un sismo? Repórtalo
+          </button>
+          <button class="AlzoMX5Button" style="flex: 1; display: flex; align-items: center; gap: 10px; color: rgb(255, 128, 128);">
+            <span class="material-icons" style="color: rgb(255, 128, 128);">emergency</span>Reportar otros riesgos
+          </button>
+        </div>
+      </div>
+
+      <div class="AlzoMX5OptionsPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0;">Funciones disponibles</h3>
+          </div>
+        </div>
+        <div style="margin-top: 15px; display: flex; flex-direction: column; gap: 10px; padding: 0 10px;">
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">report</span>Últimos sismos reportados
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">map</span>Concentración de eventos
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">query_stats</span>Analisis estadistico de eventos
+          </button>
+          <button class="AlzoMX5Button" style="width: 100%; display: flex; align-items: center; gap: 10px;">
+            <span class="material-icons">emoji_people</span>Reportes de la comunidad
+          </button>
+        </div>
+      </div>
+
+      <div class="AlzoMX5CreditsPanel">
+        <div style="display: flex; flex-direction: row; align-items: center; gap: 10px;">
+          <div style="margin-left: 5px;">
+            <h3 style="margin: 0; width: 100%; ">Créditos y agradecimientos</h3>
+            <h4 style="margin: 0; font-weight: 400; margin-top: 10px;">USGS: U.S. Geological Survey</h4>
+            <p style="font-size: 15px; margin: 0px; color: #8b8b8b;">
+              Fuente de datos para listas y mapa: <a href="https://earthquake.usgs.gov/" target="_blank" style="color: #8b8b8b;">https://earthquake.usgs.gov/</a>
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div id="AlzoMX5MapboxMap"></div>
   </div>
-  <div id="map"></div>
-</div>
 
-<script>
-  mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
-  const map = new mapboxgl.Map({
-    container: 'map',
-    style: 'mapbox://styles/mapbox/dark-v9',
-    center: [-99.133055555556, 19.432777777778],
-    zoom: 6,
-    dragRotate: false
-  });
-
-  function colorPorMagnitud(mag) {
-    if (mag >= 7) return {bg: '#292929', border: 'none', text: '#a63fff'};
-    if (mag >= 6) return {bg: '#292929', border: 'none', text: '#ff4040'};
-    if (mag >= 5) return {bg: '#292929', border: 'none', text: '#ffb84d'};
-    if (mag >= 4) return {bg: '#292929', border: 'none', text: '#4a90ff'};
-    return {bg: '#292929', border: 'none', text: '#bbb'};
-  }
-
-  function tiempoRelativo(fecha) {
-    const ahora = new Date();
-    const diffMs = ahora - fecha;
-    const diffSeg = Math.floor(diffMs / 1000);
-    const diffMin = Math.floor(diffSeg / 60);
-    const diffHrs = Math.floor(diffMin / 60);
-    const diffDias = Math.floor(diffHrs / 24);
-
-    if (diffSeg < 60) return `Hace ${diffSeg} Segundo${diffSeg === 1 ? '' : 's'}`;
-    if (diffMin < 60) return `Hace ${diffMin} Minuto${diffMin === 1 ? '' : 's'}`;
-    if (diffHrs < 24) return `Hace ${diffHrs} Hora${diffHrs === 1 ? '' : 's'}`;
-    return `Hace ${diffDias} día${diffDias === 1 ? '' : 's'}`;
-  }
-
-  async function cargarSismos() {
-    const url = 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_week.geojson';
-    const res = await fetch(url);
-    const data = await res.json();
-    const sismos = data.features.filter(s => s.properties.mag >= 4);
-
-    const list = document.getElementById('sismos');
-    list.innerHTML = '';
-
-    sismos.forEach(sismo => {
-      const coords = sismo.geometry.coordinates;
-      const mag = sismo.properties.mag;
-      const magFixed = mag.toFixed(1);
-      const place = sismo.properties.place;
-      const time = new Date(sismo.properties.time);
-      const depth = coords[2] || 0;
-      const magType = (sismo.properties.magType || sismo.properties.type || 'MD').toUpperCase();
-      const tiempoReporte = tiempoRelativo(time);
-      const fechaHora = time.toLocaleString();
-      const colors = colorPorMagnitud(mag);
-
-      const li = document.createElement('li');
-      const wrapper = document.createElement('div');
-      wrapper.className = 'event-wrapper';
-const magDiv = document.createElement('div');
-magDiv.className = 'mag-container';
-magDiv.style.backgroundColor = colors.bg;
-
-const sourceLabel = document.createElement('div');
-sourceLabel.textContent = 'USGS';
-sourceLabel.style.fontSize = '12px';
-sourceLabel.style.fontWeight = '600';
-sourceLabel.style.color = '#888';
-sourceLabel.style.marginBottom = '4px';
-
-const magValue = document.createElement('div');
-magValue.className = 'mag-value';
-magValue.textContent = magFixed;
-magValue.style.color = colors.text;
-
-const magTypeDiv = document.createElement('div');
-magTypeDiv.className = 'mag-type';
-magTypeDiv.textContent = magType;
-
-magTypeDiv.style.color = '#bbb';
-
-magDiv.appendChild(sourceLabel);
-magDiv.appendChild(magValue);
-magDiv.appendChild(magTypeDiv);
-
-
-      const infoDiv = document.createElement('div');
-      infoDiv.className = 'info-container';
-
-      const placeEl = document.createElement('div');
-      placeEl.className = 'place';
-      placeEl.textContent = place;
-
-      const subtitleContainer = document.createElement('div');
-      subtitleContainer.className = 'subtitle';
-      subtitleContainer.textContent = tiempoReporte;
-
-      const detailsContainer = document.createElement('div');
-      detailsContainer.className = 'details';
-
-      const profundidadEl = document.createElement('div');
-      profundidadEl.setAttribute('data-label', 'Profundidad:');
-      profundidadEl.textContent = `${depth.toFixed(1)} km`;
-
-      const fechaHoraEl = document.createElement('div');
-      fechaHoraEl.setAttribute('data-label', 'Fecha y hora:');
-      fechaHoraEl.textContent = fechaHora;
-
-      detailsContainer.appendChild(profundidadEl);
-      detailsContainer.appendChild(fechaHoraEl);
-
-      infoDiv.appendChild(placeEl);
-      infoDiv.appendChild(subtitleContainer);
-      infoDiv.appendChild(detailsContainer);
-
-      wrapper.appendChild(magDiv);
-      wrapper.appendChild(infoDiv);
-      li.appendChild(wrapper);
-      list.appendChild(li);
-
-      li.onclick = () => {
-        map.flyTo({ center: [coords[0], coords[1]], zoom: 4 });
-      };
+  <script>
+    mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
+    const map = new mapboxgl.Map({
+      container: 'AlzoMX5MapboxMap',
+      style: 'mapbox://styles/mapbox/dark-v11',
+      center: [-99.133055555556, 19.432777777778],
+      zoom: 1.5,
+      dragRotate: false
     });
-  }
-
-  cargarSismos();
-</script>
-
+  </script>
 </body>
+
 </html>
