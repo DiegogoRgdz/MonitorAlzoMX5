@@ -11,6 +11,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="AlzoMX5Monitor/CSS/AlzoMX5Button.css">
+<link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+<script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js"></script>
 
   <style>
     * {
@@ -151,6 +153,28 @@
   transform: translateY(-2px);
   box-shadow: 0 6px 15px rgba(0,0,0,0.2);
 }
+
+
+
+
+
+.mdc-dialog .mdc-dialog__surface {
+  background-color: #1e1e1e !important;
+  color: #ffffff !important;
+}
+
+.mdc-dialog .mdc-dialog__title {
+  color: #ffffff !important;
+}
+
+.mdc-dialog .mdc-dialog__content {
+  color: #cccccc !important;
+}
+
+.mdc-dialog .mdc-dialog__button {
+  color: #ffffff !important;
+}
+
   </style>
 </head>
 
@@ -172,12 +196,13 @@
           </div>
         </div>
         <div style="margin-top: 15px; display: flex; flex-direction: row; gap: 10px;">
-          <button class="AlzoMX5Button" style="width: 100%;">
-            <span class="material-icons" style="margin-right: 10px; color: #6184dd;">wifi</span>Conexión Wi-Fi
-          </button>
-          <button class="AlzoMX5Button" style="width: 100%;">
-            <span style="margin-right: 10px; color: rgb(255, 255, 255);" class="material-icons">check</span>Conexión con AlzoMX
-          </button>
+     <button id="btnWifi" class="AlzoMX5Button" style="width: 100%;">
+  <span class="material-icons" style="margin-right: 10px; color: #6184dd;">wifi</span>Conexión Wi-Fi
+</button>
+<button id="btnAlzo" class="AlzoMX5Button" style="width: 100%;">
+  <span style="margin-right: 10px; color: rgb(255, 255, 255);" class="material-icons">check</span>Conexión con AlzoMX
+</button>
+
         </div>
       </div>
 
@@ -241,9 +266,9 @@
     mapboxgl.accessToken = 'pk.eyJ1Ijoic3NteCIsImEiOiJjbTBtemd2c2QwN2prMm5xNWpweHo5cHNuIn0.gyloN7dCA3dB9dvs3uETuA';
     const map = new mapboxgl.Map({
       container: 'AlzoMX5MapboxMap',
-      style: 'mapbox://styles/mapbox/dark-v8',
+      style: 'mapbox://styles/mapbox/dark-v9',
       center: [-99.133055555556, 19.432777777778],
-      zoom:4,
+      zoom:4.5,
       dragRotate: false
     });
 
@@ -272,23 +297,84 @@
         paint: {
           'circle-color': [
             'interpolate', ['linear'], ['get', 'mag'],
-            4.5, '#00c3ff',
-            5.5, '#ffc400',
-            6.5, '#ff5c33',
-            7.5, '#e60073'
+            4.0, '#00c3ff',
+            5.0, '#ffc400',
+            6.0, '#ff5c33',
+            7.0, '#e60073'
           ],
           'circle-radius': [
             'interpolate', ['linear'], ['get', 'mag'],
-            4.5, 20,
-            5.5, 27,
-            6.5, 37,
-            7.5, 45
+            4.0, 20,
+            5.0, 25,
+            6.0, 40,
+            7.0, 50
           ],
-          'circle-opacity': 0.2
+          'circle-opacity': 0.3
         }
       });
     });
   </script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Dialogo -->
+<div class="mdc-dialog"
+     id="demo-dialog"
+     role="alertdialog"
+     aria-modal="true"
+     aria-labelledby="dialog-title"
+     aria-describedby="dialog-content">
+  <div class="mdc-dialog__container">
+    <div class="mdc-dialog__surface">
+      <h2 class="mdc-dialog__title" id="dialog-title">Información</h2>
+      <div class="mdc-dialog__content" id="dialog-content"></div>
+      <footer class="mdc-dialog__actions">
+        <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept">
+          <span class="mdc-button__label">Aceptar</span>
+        </button>
+      </footer>
+    </div>
+  </div>
+  <div class="mdc-dialog__scrim"></div>
+</div>
+
+<script>
+  const dialog = new mdc.dialog.MDCDialog(document.querySelector('#demo-dialog'));
+  const dialogContent = document.getElementById('dialog-content');
+document.getElementById('btnWifi').addEventListener('click', () => {
+  document.getElementById('dialog-title').textContent = "Conexión Wi-Fi";
+  dialogContent.textContent = "La conexión Wi-Fi permite recibir información en tiempo real sobre fenómenos naturales. Sin ella, no sería posible acceder a los datos y alertas del sistema.";
+  dialog.open();
+});
+
+document.getElementById('btnAlzo').addEventListener('click', () => {
+  document.getElementById('dialog-title').textContent = "Conexión con AlzoMX";
+  dialogContent.textContent = "La conexión con el servidor AlzoMX garantiza recibir reportes de la comunidad y alertas emitidas por la plataforma de manera segura y confiable.";
+  dialog.open();
+});
+
+
+</script>
+ 
+
+
+
+
+
+
+
+
+
+
+
 </body>
 
 </html>
