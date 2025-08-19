@@ -4,7 +4,7 @@
 <head>
   <title>AlzoMX 5 | Inicio</title>
   <meta charset="utf-8" />
-  <meta name="theme-color" content="#151515" />
+  <meta name="theme-color" content="#121212" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js"></script>
   <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
@@ -180,7 +180,6 @@
 
 <body>
   <header class="AlzoMX5ToolbarMenu">
-    <span class="material-icons">menu</span>
     <span style="font-weight: 600; font-size: 20px;">Monitor AlzoMX 5</span>
   </header>
 
@@ -351,13 +350,13 @@
   const dialogContent = document.getElementById('dialog-content');
 document.getElementById('btnWifi').addEventListener('click', () => {
   document.getElementById('dialog-title').textContent = "Conexión Wi-Fi";
-  dialogContent.textContent = "La conexión Wi-Fi permite recibir información en tiempo real sobre fenómenos naturales. Sin ella, no sería posible acceder a los datos y alertas del sistema.";
+  dialogContent.textContent = "Permite recibir información en tiempo real sobre fenómenos naturales. Sin ella, no sería posible acceder a los datos y alertas del sistema.";
   dialog.open();
 });
 
 document.getElementById('btnAlzo').addEventListener('click', () => {
   document.getElementById('dialog-title').textContent = "Conexión con AlzoMX";
-  dialogContent.textContent = "La conexión con el servidor AlzoMX garantiza recibir reportes de la comunidad y alertas emitidas por la plataforma de manera segura y confiable.";
+  dialogContent.textContent = "Garantiza recibir reportes de la comunidad y alertas emitidas por la plataforma de manera segura y confiable.";
   dialog.open();
 });
 
