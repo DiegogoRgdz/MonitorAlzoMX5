@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#0e0d0d" />
+  <title>AlzoMX 5 | Monitor Sísmico</title>
+  <link rel="manifest" href="/manifest.webmanifest">
+
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="AlzoMX">
+
+  <!-- Fonts & Icons -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@400&display=swap" rel="stylesheet" />
+
+  <!-- Material Components -->
+  <link rel="stylesheet" href="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.css">
+  <script src="https://unpkg.com/material-components-web@latest/dist/material-components-web.min.js" defer></script>
+
+  <!-- Mapbox GL -->
+  <link href="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.css" rel="stylesheet" />
+  <script src="https://api.mapbox.com/mapbox-gl-js/v3.14.0/mapbox-gl.js" defer></script>
+
+  <!-- App styles -->
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <header class="toolbar" role="banner">
+    <div class="toolbar-left">
+      <span class="material-icons" aria-hidden="true">public</span>
+      <span class="brand">Monitor AlzoMX</span>
+    </div>
+    <span class="beta-badge" aria-label="Versión beta">BETA</span>
+  </header>
+
+  <div class="main">
+    <aside id="side" aria-label="Menú lateral">
+      <!-- HOME -->
+      <div id="panelHome" class="panel active no-scrollbar">
+        <div class="stack" style="height:100%">
+          <section class="card stack">
+            <div class="row">
+              <div id="avatarSlot" aria-live="polite">
+                <div class="avatar-icon" aria-label="Sin foto de perfil">
+                  <span class="material-icons" aria-hidden="true">account_circle</span>
+                </div>
+              </div>
+              <div class="user-block">
+                <h3 id="userName" class="user-title">Bienvenido, Usuario Anonimo</h3>
+                <p class="muted user-sub">Inicia sesión ahora</p>
+              </div>
+            </div>
+
+            <div class="conn-row">
+              <button id="btnWifi" class="btn btn-conn" type="button">
+                <span id="wifiIcon" class="material-icons icon-wifi wifi-ok" aria-hidden="true">wifi</span>Conexión Wi‑Fi
+              </button>
+              <button id="btnAlzo" class="btn btn-conn" type="button">
+                <span id="alzoIcon" class="material-icons icon-wifi server-ok" aria-hidden="true">check</span>Servidor AlzoMX
+              </button>
+            </div>
+          </section>
+
+          <section class="card stack-sm">
+            <h3 class="card-title">Funciones disponibles</h3>
+            <div class="row row-actions">
+              <button id="btnOpenList" class="btn full" type="button"><span class="material-icons" aria-hidden="true">report</span>Últimos sismos reportados</button>
+              <button id="btnHeat" class="btn full" type="button"><span class="material-icons" aria-hidden="true">map</span>Simulador de eventos</button>
+              <button class="btn full" id="btnStats" type="button"><span class="material-icons" aria-hidden="true">query_stats</span>Estadísticas de eventos</button>
+              <button class="btn full" id="btnCommunity" type="button"><span class="material-icons" aria-hidden="true">emoji_people</span>Reportes comunidad</button>
+            </div>
+          </section>
+
+          <section class="card stack-sm">
+            <h3 class="card-title">Fuentes oficiales</h3>
+            <p class="muted small">Consulta siempre información oficial para garantizar datos confiables, verificados y actualizados.</p>
+            <div class="row links">
+              <a href="http://www.cires.org.mx/" target="_blank" rel="noopener noreferrer" class="btn full">Centro de Instrumentación y Registro Sísmico CIRES A.C</a>
+              <a href="https://www.gob.mx/cenapred" target="_blank" rel="noopener noreferrer" class="btn full">Centro Nacional de Prevención de Desastres</a>
+              <a href="http://www.ssn.unam.mx/" target="_blank" rel="noopener noreferrer" class="btn full">Servicio Sismológico Nacional</a>
+            </div>
+            <p class="notice">
+              <span class="material-icons" aria-hidden="true">warning</span>
+              <span>Sigue datos de FUENTES OFICIALES, evita caer en información de otros medios ajenos.</span>
+            </p>
+          </section>
+
+          <section class="card stack-sm">
+            <h3 class="card-title">Créditos y datos</h3>
+            <p class="muted small">
+              Los datos, información y coordenadas mostrados fueron obtenidos de
+              <a href="https://earthquake.usgs.gov/" target="_blank" rel="noopener noreferrer">U.S. Geological Survey (USGS)</a>.<br><br>
+              © U.S. Geological Survey — Todos los derechos reservados.
+            </p>
+          </section>
+        </div>
+      </div>
+
+      <!-- LISTA -->
+      <div id="panelList" class="panel hidden inactive">
+        <div class="list-header-wrap">
+          <div class="list-header" role="region" aria-label="Controles de lista">
+            <div class="lh-title">
+              <h2 id="listTitle">Últimos sismos por USGS</h2>
+              <div class="lh-meta"><span id="lastUpdated" title="Hora local">Última actualización: --</span></div>
+            </div>
+            <div class="lh-actions">
+              <button id="btnFilters" class="btn btn-icon" type="button" aria-label="Filtros" title="Filtros"><span class="material-icons" aria-hidden="true">filter_list</span></button>
+              <button id="btnRefresh" class="btn btn-icon" type="button" aria-label="Actualizar" title="Actualizar"><span class="material-icons" aria-hidden="true">refresh</span></button>
+              <button id="btnBack" class="btn btn-icon" type="button" aria-label="Volver" title="Volver"><span class="material-icons" aria-hidden="true">arrow_back</span></button>
+            </div>
+          </div>
+        </div>
+
+        <div id="eqScroll" class="stack">
+          <section id="eqList">
+            <div class="eq-card" aria-hidden="true">
+              <div class="eq-item">
+                <div class="magbox"><span class="t1">MAG</span><span class="t2">…</span><span class="t3">—</span></div>
+                <div class="eq-text">
+                  <div class="title">Cargando sismos…</div>
+                  <div class="meta">Espera un momento</div>
+                </div>
+              </div>
+            </div>
+          </section>
+          <div id="loadMoreWrap" style="display:none">
+            <button id="btnLoadMore" class="btn btn-compact" type="button"><span class="material-icons" aria-hidden="true">expand_more</span>Cargar más eventos</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIMULADOR -->
+      <div id="panelSim" class="panel hidden inactive">
+        <div class="list-header-wrap">
+          <div class="list-header" role="region" aria-label="Controles del simulador">
+            <div class="lh-title">
+              <h2>Simulador de eventos</h2>
+              <div class="lh-meta"><span id="simStatus">Mapa limpio. Configure y ejecute.</span></div>
+            </div>
+            <div class="lh-actions">
+              <button id="btnSimToggle" class="btn btn-icon" type="button" aria-label="Iniciar evento" title="Iniciar evento">
+                <span id="iconSimToggle" class="material-icons">play_circle</span>
+              </button>
+              <button id="btnSimBack" class="btn btn-icon" type="button" aria-label="Volver" title="Volver"><span class="material-icons">arrow_back</span></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card de parámetros -->
+        <section class="card stack">
+          <h3 class="card-title">Configurar parámetros</h3>
+          <div class="sim-grid">
+            <label>Latitud epicentro
+              <input id="epLat" type="number" placeholder="19.246" inputmode="decimal">
+            </label>
+            <label>Longitud epicentro
+              <input id="epLon" type="number" placeholder="-99.101" inputmode="decimal">
+            </label>
+
+            <label>Profundidad (km)
+              <input id="epDepth" type="text" placeholder="15" inputmode="decimal">
+            </label>
+
+            <label>Intensidad
+              <select id="epIntensity">
+                <option value="leve" selected>Leve</option>
+                <option value="moderado">Moderada</option>
+                <option value="Fuerte">Fuerte</option>
+                <option value="Violento">Violento</option>
+              </select>
+            </label>
+
+            <label>Latitud destino
+              <input id="usLat" type="number" placeholder="19.4326" inputmode="decimal">
+            </label>
+            <label>Longitud destino
+              <input id="usLon" type="number" placeholder="-99.1331" inputmode="decimal">
+            </label>
+
+            <div class="sim-actions">
+              <button id="btnPickEpic" class="btn btn-compact" type="button">
+                <span class="material-icons">add_location_alt</span>Asignar epicentro con click
+              </button>
+              <button id="btnPickUser" class="btn btn-compact" type="button">
+                <span class="material-icons">person_pin_circle</span>Asignar usuario con click
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="card" id="simDisclaimer">
+          <p class="muted small">
+            La simulación es con fines educativos y no garantiza que, en un evento sísmico real, los datos o resultados coincidan con los aquí mostrados.
+          </p>
+        </section>
+      </div>
+    </aside>
+
+    <div id="map" role="application" aria-label="Mapa sísmico"></div>
+  </div>
+
+  <!-- Diálogo genérico -->
+  <div class="mdc-dialog" id="sys-dialog" role="alertdialog" aria-modal="true" aria-labelledby="sys-title" aria-describedby="sys-content">
+    <div class="mdc-dialog__container">
+      <div class="mdc-dialog__surface">
+        <h2 class="mdc-dialog__title" id="sys-title">Información</h2>
+        <div class="mdc-dialog__content" id="sys-content"></div>
+        <footer class="mdc-dialog__actions">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"><span class="mdc-button__label">Aceptar</span></button>
+        </footer>
+      </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+  </div>
+
+  <!-- Diálogo de Filtros -->
+  <div class="mdc-dialog" id="filters-dialog" role="dialog" aria-modal="true" aria-labelledby="filters-title" aria-describedby="filters-content">
+    <div class="mdc-dialog__container">
+      <div class="mdc-dialog__surface">
+        <h2 class="mdc-dialog__title" id="filters-title">Filtros</h2>
+        <div class="mdc-dialog__content" id="filters-content">
+          <form id="filtersForm" class="filters-form">
+            <div class="form-title">Rango de datos</div>
+            <label class="form-row">
+              <select id="rangeSelect">
+                <option value="week">Semanal (7 días)</option>
+                <option value="month">Mensual (30 días)</option>
+              </select>
+            </label>
+
+            <div class="form-title">Magnitud</div>
+            <label>Mínimo<input id="magMin" type="number" step="0.1" min="0" placeholder="0.0"></label>
+            <label>Máximo<input id="magMax" type="number" step="0.1" placeholder="—"></label>
+
+            <div class="form-title">Profundidad (km)</div>
+            <label>Mínimo<input id="depthMin" type="number" step="0.1" placeholder="0"></label>
+            <label>Máximo<input id="depthMax" type="number" step="0.1" placeholder="—"></label>
+          </form>
+        </div>
+        <footer class="mdc-dialog__actions">
+          <button type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="close"><span class="mdc-button__label">Cancelar</span></button>
+          <button id="filtersApply" type="button" class="mdc-button mdc-dialog__button" data-mdc-dialog-action="accept"><span class="mdc-button__label">Aplicar</span></button>
+        </footer>
+      </div>
+    </div>
+    <div class="mdc-dialog__scrim"></div>
+  </div>
+
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js').catch(()=>{});
+      });
+    }
+  </script>
+  <script src="/assets/js/app.js" defer></script>
+</body>
+</html>

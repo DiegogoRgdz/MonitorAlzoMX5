@@ -1,0 +1,11 @@
+{
+  "name": "AlzoMX Monitor Sísmico",
+  "short_name": "AlzoMX",
+  "start_url": "/index.html",
+  "display": "standalone",
+  "background_color": "#0b0b0b",
+  "theme_color": "#0e0d0d",
+  "lang": "es",
+  "description": "Monitor de sismos con datos USGS, mapa y simulador educativo.",
+  "icons": []
+}
